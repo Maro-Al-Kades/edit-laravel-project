@@ -7,19 +7,30 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    public function apply(Request $r){
+    public function apply(Request $r)
+    {
         $r->validate([
-            'phone' => 'required|unique:clients,phone|min:9|max:9',
-            'name' => 'required',
+            'phone' => [
+                'required',
+                'unique:clients,phone',
+                'regex:/^[1-9]\d*$/', // التأكد من أن الرقم لا يبدأ بصفر
+            ],
+            'name' => ['required', 'regex:/^[\pL\s]+$/u', 'min:4'], // التحقق من الاسم الرباعي
             'n_shares' => 'required',
             'area' => 'required',
             'city' => 'required',
+            'email' => ['required', 'email'], // التحقق من صحة البريد الإلكتروني
         ]);
 
+        $nameWords = explode(' ', trim($r->name));
+        if (count($nameWords) < 4) {
+            return back()->withErrors(['name' => 'يجب إدخال الاسم الرباعي.']);
+        }
         $client = new Client;
 
-        $client->phone = $r->code . $r->phone;
+        $client->phone = $r->code.$r->phone;
         $client->name = $r->name;
+        $client->email = $r->email;
         $client->n_shares = $r->n_shares;
         $client->area_id = $r->area;
         $client->city_id = $r->city;
@@ -28,11 +39,12 @@ class ClientController extends Controller
         $client->save();
 
         return back()->with([
-            'message' => 'تم التقديم بنجاح'
+            'message' => 'تم التقديم بنجاح',
         ]);
     }
 
-    public function apply_contract(Request $r , Client $client){
+    public function apply_contract(Request $r, Client $client)
+    {
 
         $r->validate([
             'fullname' => 'required',
