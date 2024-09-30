@@ -1,0 +1,45 @@
+body {
+    width: 100vw;
+    min-height: 100vh;
+    background-color: #292930;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+body form {
+    width: 60%;
+    margin-bottom: 15px;
+}
+
+body form label {
+    color: white;
+}
+
+body form button[type="submit"] {
+    background-color: #c67f30;
+    border-color: #c9873c;
+}
+
+body form button[type="submit"]:hover {
+    color: white;
+    background-color: #c9873c;
+    border-color: #c9873c;
+}
+
+.company-logo {
+    width: 90px;
+}
+
+body .alert {
+    height: 250px;
+    width: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    text-align: center;
+    font-weight: 900;
+}
